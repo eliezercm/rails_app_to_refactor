@@ -35,6 +35,6 @@ class User::Register < Micro::Case
     end
 
   rescue  ActionController::ParameterMissing => e
-    Failure :missing_parameter, result: { error: e.message }
+    Failure :missing_parameter, result: { user: e.message }
   end
 end
