@@ -1,4 +1,6 @@
-RSpec.describe User::Register do
+include ActiveJob::TestHelper
+
+RSpec.describe User::RegisterAndSendWelcomeEmail do
   context '.call' do
     context 'with invalid user params' do
       context 'without user params' do
@@ -67,7 +69,7 @@ RSpec.describe User::Register do
         params = ActionController::Parameters.new(
           user: {
             :name => 'tester',
-            :email => '123@gmail.com',
+            :email => '123@mail.com',
             :password => '1234',
             :password_confirmation => '1234'
           }
@@ -77,6 +79,21 @@ RSpec.describe User::Register do
 
         expect(result).to be_a_success
         expect(result.data[:user].keys).to match_array(["id", "name", "token"])
+      end
+
+      it 'sends a welcome email' do
+        params = ActionController::Parameters.new(
+          user: {
+            :name => 'tester',
+            :email => '123@mail.com',
+            :password => '1234',
+            :password_confirmation => '1234'
+          }
+        )
+
+        expect { 
+          described_class.call(params: params) 
+        }.to have_enqueued_mail(UserMailer, :welcome)
       end
     end
   end
