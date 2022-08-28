@@ -16,6 +16,8 @@ gem 'puma', '~> 5.1', '>= 5.1.1'
 # Use Active Model has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
+gem 'u-case', '~> 4.5', '>= 4.5.1'
+
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
