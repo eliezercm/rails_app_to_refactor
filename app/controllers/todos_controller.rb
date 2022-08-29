@@ -26,7 +26,7 @@ class TodosController < ApplicationController
   def show
     Todo::Find
       .call(id: params[:id], current_user: current_user)
-      .on_success {|result| render_json(200, todo: result.data[:todo].serialize_as_json)}
+      .on_success {|result| render_json(200, todo: result.data[:todo])}
       .on_failure(:not_found) {|data| render_json(404, todo: data[:todo])}
   end
 

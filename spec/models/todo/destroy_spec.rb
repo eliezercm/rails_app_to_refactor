@@ -1,4 +1,4 @@
-RSpec.describe Todo::Find do
+RSpec.describe Todo::Destroy do
   let(:user) { User.create(name: 'test', email: 'find@mail.com', token: SecureRandom.uuid, password_digest: Digest::SHA256.hexdigest('1234')) }
 
   context '.call' do
@@ -14,7 +14,7 @@ RSpec.describe Todo::Find do
     end
 
     context 'with a existent todo id' do
-      it 'returns success with todo as result' do
+      it 'delete todo and returns success' do
         Todo.delete_all
 
         todo_id = 1
@@ -23,6 +23,8 @@ RSpec.describe Todo::Find do
         result = described_class.call(id: todo_id, current_user: user)
 
         expect(result).to be_a_success
+        expect(user.todos.count).to eq(0)
+
         expect(result.data[:todo]['title']).to eq('task #1')
         expect(result.data[:todo]['id']).to eq(1)
       end
