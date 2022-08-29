@@ -1,5 +1,3 @@
-require 'date'
-
 RSpec.describe Todo::Find do
   let(:user) { User.create(name: 'test', email: 'find@mail.com', token: SecureRandom.uuid, password_digest: Digest::SHA256.hexdigest('1234')) }
 
