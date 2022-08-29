@@ -10,17 +10,9 @@ class TodosController < ApplicationController
   end
 
   def index
-    todos =
-      case params[:status]&.strip&.downcase
-      when 'overdue' then Todo.overdue
-      when 'completed' then Todo.completed
-      when 'uncompleted' then Todo.uncompleted
-      else Todo.all
-      end
-
-    json = todos.where(user_id: current_user.id).map(&:serialize_as_json)
-
-    render_json(200, todos: json)
+    Todo::List
+      .call(status: params[:status], current_user: current_user)
+      .on_success {|result| render_json(200, todos: result.data[:todos])}
   end
 
   def create
