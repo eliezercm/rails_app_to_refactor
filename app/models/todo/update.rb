@@ -16,5 +16,8 @@ class Todo::Update < Micro::Case
 
   rescue  ActionController::ParameterMissing => e
     Failure :missing_parameter, result: { todo: e.message }
+
+  rescue ActiveRecord::RecordNotFound => e
+    Failure :not_found, result: { todo: e.message }
   end
 end

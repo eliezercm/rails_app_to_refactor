@@ -19,11 +19,29 @@ RSpec.describe Todo::Update do
     end
 
     context 'with valid attributes' do
+      context 'with a nonexistent todo id' do
+        it 'returns a not found failure' do
+          id = 321
+
+          params = ActionController::Parameters.new(
+            todo: {
+              :title => 'task #1 modified',
+              :due_at => '20220829'
+            }
+          )
+  
+          result = described_class.call(id: id, current_user: user, params: params)
+  
+          expect(result).to be_a_failure
+          expect(result.type).to eq(:not_found)
+        end
+      end
+
       context 'with an existent todo id' do
         it 'updates todo and return success' do
           Todo.delete_all
           
-          todo_id = 1
+          id = 1
           user.todos.create(title: 'task #1')
 
           params = ActionController::Parameters.new(
@@ -33,7 +51,7 @@ RSpec.describe Todo::Update do
             }
           )
   
-          result = described_class.call(id: todo_id, current_user: user, params: params)
+          result = described_class.call(id: id, current_user: user, params: params)
   
           expect(result).to be_a_success
   
