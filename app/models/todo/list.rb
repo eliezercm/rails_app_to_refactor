@@ -10,8 +10,8 @@ class Todo::List < Micro::Case
         else Todo.all
       end
 
-    user_todos_as_json = todos.where(user_id: current_user.id).map(&:serialize_as_json)
+    todos_as_json = todos.where(user_id: current_user.id).map(&:serialize_as_json)
 
-    Success result: { todos: user_todos_as_json }
+    Success result: { todos: todos_as_json }
   end
 end
