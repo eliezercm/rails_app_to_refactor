@@ -16,13 +16,11 @@ class TodosController < ApplicationController
   end
 
   def create
-    todo = current_user.todos.create(todo_params)
-
-    if todo.valid?
-      render_json(201, todo: todo.serialize_as_json)
-    else
-      render_json(422, todo: todo.errors.as_json)
-    end
+    Todo::Create
+      .call(params: params, current_user: current_user)
+      .on_success {|result| render_json(201, todo: result.data[:todo])}
+      .on_failure(:missing_parameter) {|data| render_json(422, todo: data[:todo])}
+      .on_failure(:invalid_attributes) {|data| render_json(422, todo: data[:todo])}
   end
 
   def show
