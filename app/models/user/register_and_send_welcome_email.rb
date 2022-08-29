@@ -28,10 +28,10 @@ class User::RegisterAndSendWelcomeEmail < Micro::Case
 
         if user.save
           UserMailer.with(user: user).welcome.deliver_later
-
+          
           Success result: { user: user.as_json(only: [:id, :name, :token]) }
         else
-          Failure :invalid_parameters, result: { user: user.errors.as_json }
+          Failure :invalid_attributes, result: { user: user.errors.as_json }
         end
       end
     end

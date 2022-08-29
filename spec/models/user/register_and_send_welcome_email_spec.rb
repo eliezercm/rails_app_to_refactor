@@ -59,7 +59,7 @@ RSpec.describe User::RegisterAndSendWelcomeEmail do
           result = described_class.call(params: params)
   
           expect(result).to be_a_failure
-          expect(result.type).to be :invalid_parameters
+          expect(result.type).to be :invalid_attributes
         end
       end
     end
