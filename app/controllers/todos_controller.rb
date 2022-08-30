@@ -38,13 +38,11 @@ class TodosController < ApplicationController
   end
 
   def update
-    @todo.update(todo_params)
-
-    if @todo.valid?
-      render_json(200, todo: @todo.serialize_as_json)
-    else
-      render_json(422, todo: @todo.errors.as_json)
-    end
+    Todo::Update
+      .call(params: params, current_user: current_user, id: params[:id])
+      .on_success {|result| render_json(200, todo: result.data[:todo])}
+      .on_failure(:missing_parameter) {|data| render_json(422, todo: data[:todo])}
+      .on_failure(:invalid_attributes) {|data| render_json(422, todo: data[:todo])}
   end
 
   def complete
